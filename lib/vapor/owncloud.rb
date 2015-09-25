@@ -15,15 +15,15 @@ module Vapor
         overwrite: false
       }.merge(options)
 
-      log "Attempt to store file #{path.inspect} at #{remote_path.inspect}"
+      # log "Attempt to store file #{path.inspect} at #{remote_path.inspect}"
 
       if dav.exists?(URI::encode(remote_path))
-        log ".. remote file already exists"
+        # log ".. remote file already exists"
         if options[:overwrite]
-          log ".. .. overwrite option set: deleting and replacing remote file"
+          # log ".. .. overwrite option set: deleting and replacing remote file"
           delete_file(remote_path)
         else
-          log ".. .. overwrite option NOT set, stopping"
+          # log ".. .. overwrite option NOT set, stopping"
           return false
         end
       end
@@ -32,15 +32,15 @@ module Vapor
       base_path = File.join( split_path[0, split_path.length - 1] )
 
       unless dav.exists?(URI::encode(base_path))
-        log ".. base directory #{base_path.inspect} does not exist"
+        # log ".. base directory #{base_path.inspect} does not exist"
         mkdir(base_path)
       end
 
       begin
-        log "Uploading #{path.inspect} to #{remote_path.inspect}"
+        # log "Uploading #{path.inspect} to #{remote_path.inspect}"
         File.open(path, 'r') { |stream| dav.put(URI::encode(remote_path), stream, File.size(path)) }
       rescue Net::HTTPServerException => e
-        log ".. http error: #{e.class}: #{e.message}"
+        # log ".. http error: #{e.class}: #{e.message}"
       end
     end
 
@@ -61,12 +61,12 @@ module Vapor
     #
     def self.get_file path, target_path = nil
       unless dav.exists?(URI::encode(path))
-        log "Can't find remote file #{path.inspect}: file does not exist"
+        # log "Can't find remote file #{path.inspect}: file does not exist"
         return false
       end
 
       begin
-        log "Retrieving remote file #{path.inspect}"
+        # log "Retrieving remote file #{path.inspect}"
         content = dav.get(URI::encode(path))
         if target_path
           File.open(target_path, 'wb').write(content)
@@ -74,7 +74,7 @@ module Vapor
           content
         end
       rescue Net::HTTPServerException => e
-        log ".. http error: #{e.class}: #{e.message}"
+        # log ".. http error: #{e.class}: #{e.message}"
         false
       end
     end
@@ -87,16 +87,16 @@ module Vapor
     #
     def self.delete_file path
       unless dav.exists?(URI::encode(path))
-        log "Can't delete remote file #{path.inspect}: file does not exist"
+        # log "Can't delete remote file #{path.inspect}: file does not exist"
         return false
       end
 
       begin
-        log "Deleting remote file #{path.inspect}"
+        # log "Deleting remote file #{path.inspect}"
         dav.delete(URI::encode(path))
         true
       rescue Net::HTTPServerException => e
-        log ".. http error: #{e.class}: #{e.message}"
+        # log ".. http error: #{e.class}: #{e.message}"
         false
       end
     end
@@ -108,7 +108,7 @@ module Vapor
     #
     def self.mkdir path
       begin
-        log "Creating remote path #{path.inspect}"
+        # log "Creating remote path #{path.inspect}"
 
         split_path = path.split('/')
 
@@ -121,7 +121,7 @@ module Vapor
         end
         true
       rescue Net::HTTPServerException => e
-        log ".. http error: #{e.class}: #{e.message}"
+        # log ".. http error: #{e.class}: #{e.message}"
         false
       end
     end
@@ -138,14 +138,14 @@ module Vapor
       destination = "#{Rails.application.config.owncloud[:base_path]}/#{destination}"
 
       unless dav.exists?(URI::encode(path))
-        log "Can't move remote file or directory #{path.inspect}: file or directory does not exist"
+        # log "Can't move remote file or directory #{path.inspect}: file or directory does not exist"
         return false
       end
 
       begin
         dav.move(URI::encode(path), URI::encode(destination))
       rescue Net::HTTPServerException => e
-        log ".. http error: #{e.class}: #{e.message}"
+        # log ".. http error: #{e.class}: #{e.message}"
         false
       end
     end
@@ -153,7 +153,7 @@ module Vapor
     def self.list_files path
       path = "#{Rails.application.config.owncloud[:base_path]}/#{path}"
       unless dav.exists?(URI::encode(path))
-        log "Can't list remote path #{path.inspect}: path does not exist"
+        # log "Can't list remote path #{path.inspect}: path does not exist"
         return false
       end
 
@@ -164,25 +164,26 @@ module Vapor
         end
         return items
       rescue Net::HTTPServerException => e
-        log ".. http error: #{e.class}: #{e.message}"
+        # log ".. http error: #{e.class}: #{e.message}"
         false
       end
     end
 
     protected
 
-    def self.log message
-      logger.info "#{Time.now} | #{message}"
-    end
-
-    def self.logger
-      @logger ||= Logger.new( Rails.root.join( "log", "owncloud_#{Rails.env}.log") )
-    end
+    # def self.log message
+    #   logger.info "#{Time.now} | #{message}"
+    # end
+    #
+    # def self.logger
+    #   @logger ||= Logger.new( Rails.root.join( "log", "owncloud_#{Rails.env}.log") )
+    # end
 
     def self.dav
       @dav ||= begin
-        dav = Net::DAV.new( Rails.application.config.owncloud[:base_url] )
-        dav.credentials( Rails.application.config.owncloud[:username], Rails.application.config.owncloud[:password] )
+        # TODO dunyakirkali: read url from config
+        dav = Net::DAV.new(Vapor.configuration.base_url)
+        dav.credentials(Vapor.configuration.username, Vapor.configuration.password)
         dav.verify_server = false
         dav
       end
