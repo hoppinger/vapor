@@ -22,11 +22,29 @@ Or install it yourself as:
 
 ## Usage
 
+To check if a path exists
+
+    Vapor.exists?('destination')
+    Vapor.exists?('des tina tion')  # Spaces are allowed
+    Vapor.exists?('des&tination')   # Special chars are allowed
+    Vapor.exists?('destination/dest.file')
+
+In order to delete a path
+
+    Vapor.delete('destination')            # Directories
+    Vapor.delete('destination/dest.file')  # As well as Files
+
+In order to put a file
+
+    Vapor.put_file('destination.file')
+
+In order to get a file
+
+    Vapor.get_file('destination.file')
+
 In order to create a directory
 
     Vapor.mkdir('orphan')
-    Vapor.mkdir('dir ec tory')  # Spaces are allowed
-    Vapor.mkdir('dir&ectory')   # Special chars are allowed
     Vapor.mkdir('parent/child')
     Vapor.mkdir('parent/child/grand_child')
 
