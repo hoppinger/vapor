@@ -70,3 +70,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/vapor.
+
+## Hoppinger
+
+This gem was created by [Hoppinger](http://www.hoppinger.com)
+
+[![forthebadge](http://forthebadge.com/images/badges/built-with-ruby.svg)](http://www.hoppinger.com)
