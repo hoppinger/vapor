@@ -26,6 +26,28 @@ RSpec.describe Vapor::OwnCloud do
       end
     end
 
+    describe "move" do
+      it "should return false if source file does not exist" do
+        expect(Vapor.move("non-existing.file", "non-existing.file")).to eq(false)
+      end
+
+      it "should return false if source folder does not exist" do
+        expect(Vapor.move("non-existing-folder", "non-existing-folder")).to eq(false)
+      end
+
+      it "should return false if destination file exists" do
+        expect(Vapor.move("existing.file", "existing.file")).to eq(false)
+      end
+
+      it "should return false if destination folder exists" do
+        expect(Vapor.move("existing-folder", "existing-folder")).to eq(false)
+      end
+
+      it "should return false if path does not exist" do
+        expect(Vapor.move("non-existing.file", "non-existing.file")).to eq(false)
+      end
+    end
+
     describe "delete" do
       it "should delete file if it exists" do
         expect(Vapor.delete("existing.file")).to eq(true)

@@ -33,7 +33,7 @@ module Vapor
     def put_file(file_path, remote_path)
       return false if exists?(remote_path) && !Vapor.options[:overwrite]
       delete(remote_path) if Vapor.options[:overwrite]
-      
+
       split_remote_path = remote_path.split("/")
       base_path = File.join(split_remote_path[0, split_remote_path.length - 1])
       mkdir(base_path)
@@ -121,23 +121,19 @@ module Vapor
       # :nocov:
     end
 
-        ######################################################################
-
-    def self.move(path, destination)
-      path = "#{Rails.application.config.owncloud[:base_path]}/#{path}"
-      destination = "#{Rails.application.config.owncloud[:base_path]}/#{destination}"
-
-      unless dav.exists?(URI.encode(path))
-        Vapor.log "Can't move remote file or directory #{path.inspect}: file or directory does not exist"
-        return false
-      end
-
+    def move(path, destination)
+      Vapor.log "move: #{path}, #{destination}"
+      return false unless exists?(path)
+      return false if exists?(destination)
       begin
-        dav.move(URI.encode(path), URI.encode(destination))
+        dav.move(encoded(path), encoded(destination))
+        true
+      # :nocov:
       rescue Net::HTTPServerException => e
         Vapor.log ".. http error: #{e.class}: #{e.message}"
         false
       end
+      # :nocov:
     end
 
     def dav

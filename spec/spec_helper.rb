@@ -40,5 +40,7 @@ RSpec.configure do |config|
 
     stub_request(:put, "http://www.hoppinger.com/test/existing.file").to_return(status: 200, body: "", headers: {})
     stub_request(:put, "http://www.hoppinger.com/test/non-existing.file").to_return(status: 200, body: "", headers: {})
+
+    stub_request(:move, "http://www.hoppinger.com/test/existing.file").to_return(status: 200, body: "", headers: {})
   end
 end
