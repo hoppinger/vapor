@@ -52,6 +52,20 @@ RSpec.describe Vapor::OwnCloud do
       end
     end
 
+    describe "get_file" do
+      it "should return file if path does not exist" do
+        expect(Vapor.get_file("non-existing.file")).to eq(false)
+      end
+
+      it "should get file if it exists" do
+        expect(Vapor.get_file("existing.file")).to eq("content")
+      end
+
+      it "should get file if it exists and write to target if target_path exists" do
+        expect(Vapor.get_file("existing.file", "target.file")).to eq(true)
+      end
+    end
+
     describe "mkdir" do
       it "should create a directory if it does not exist" do
         expect(Vapor.mkdir("non-existing")).to match_array([true])

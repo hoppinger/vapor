@@ -22,13 +22,16 @@ RSpec.configure do |config|
     stub_request(:propfind, "http://www.hoppinger.com/test/non-existing").to_return(status: 500, body: "", headers: {})
     stub_request(:propfind, "http://www.hoppinger.com/test/existing/non-existing").to_return(status: 500, body: "", headers: {})
     stub_request(:propfind, "http://www.hoppinger.com/test/non-existing.file").to_return(status: 500, body: "", headers: {})
-
-    stub_request(:mkcol, "http://www.hoppinger.com/test/non-existing").to_return(status: 200, body: "", headers: {})
     stub_request(:propfind, "http://www.hoppinger.com/test/non-existing/non-existing").to_return(status: 200, body: "", headers: {})
-    stub_request(:mkcol, "http://www.hoppinger.com/test/existing/non-existing").to_return(status: 200, body: "", headers: {})
 
     stub_request(:propfind, "http://www.hoppinger.com/test/existing.file").to_return(status: 200, body: "", headers: {})
     stub_request(:propfind, "http://www.hoppinger.com/test/existing").to_return(status: 200, body: "", headers: {})
+
+    stub_request(:mkcol, "http://www.hoppinger.com/test/non-existing").to_return(status: 200, body: "", headers: {})
+    stub_request(:mkcol, "http://www.hoppinger.com/test/existing/non-existing").to_return(status: 200, body: "", headers: {})
+
     stub_request(:delete, "http://www.hoppinger.com/test/existing.file").to_return(status: 200, body: "", headers: {})
+
+    stub_request(:get, "http://www.hoppinger.com/test/existing.file").to_return(status: 200, body: "content", headers: {})
   end
 end

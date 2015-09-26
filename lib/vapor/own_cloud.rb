@@ -69,19 +69,14 @@ module Vapor
       URI.encode([Vapor.configuration.base_path, path].join("/"))
     end
 
-    ######################################################################
-
-    def self.get_file(path, target_path = nil)
-      unless dav.exists?(URI.encode(path))
-        Vapor.log "Can't find remote file #{path.inspect}: file does not exist"
-        return false
-      end
-
+    def get_file(path, target_path = nil)
+      Vapor.log "get_file: #{path}, #{target_path}"
+      return false unless exists?(path)
       begin
-        Vapor.log "Retrieving remote file #{path.inspect}"
-        content = dav.get(URI.encode(path))
+        content = dav.get(encoded(path))
         if target_path
           File.open(target_path, "wb").write(content)
+          true
         else
           content
         end
@@ -90,6 +85,8 @@ module Vapor
         false
       end
     end
+
+        ######################################################################
 
     def self.move(path, destination)
       path = "#{Rails.application.config.owncloud[:base_path]}/#{path}"
