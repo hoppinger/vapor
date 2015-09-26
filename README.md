@@ -22,6 +22,15 @@ Or install it yourself as:
 
 ## Usage
 
+Configure Vapor by adding your own_cloud credentials via an initializer `config/initializers/vapor.rb`
+
+    Vapor.configure do |config|
+      config.base_url = ENV["OWN_CLOUD_BASE_URL"]
+      config.base_path = ENV["OWN_CLOUD_BASE_PATH"]
+      config.username = ENV["OWN_CLOUD_USER"]
+      config.password = ENV["OWN_CLOUD_BASE_PASSWORD"]
+    end
+
 To check if a path exists
 
     Vapor.exists?('destination')
