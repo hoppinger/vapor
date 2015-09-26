@@ -46,7 +46,9 @@ RSpec.describe Vapor::OwnCloud do
 
     describe "put_file" do
       xit "should put file if it exists and options[:overwrite] = true" do
+        Vapor.options[:overwrite] = true
         expect(Vapor.put_file("existing.file", "existing.file")).to eq(true)
+        Vapor.options[:overwrite] = false
       end
 
       xit "should put file if it does not exist" do
@@ -54,9 +56,7 @@ RSpec.describe Vapor::OwnCloud do
       end
 
       it "should not put file if it exists and options[:overwrite] = false" do
-        Vapor.options[:overwrite] = false
         expect(Vapor.put_file("existing.file", "existing.file")).to eq(false)
-        Vapor.options[:overwrite] = true
       end
     end
 
@@ -71,6 +71,16 @@ RSpec.describe Vapor::OwnCloud do
 
       it "should get file if it exists and write to target if target_path exists" do
         expect(Vapor.get_file("existing.file", "target.file")).to eq(true)
+      end
+    end
+
+    describe "list_files" do
+      it "should return false if path does not exist" do
+        expect(Vapor.list_files("non-existing-folder")).to eq(false)
+      end
+
+      it "should return list of files if path exists" do
+        expect(Vapor.list_files("existing-folder")).to eq([])
       end
     end
 

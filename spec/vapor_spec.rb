@@ -22,12 +22,14 @@ RSpec.describe Vapor do
 
     describe "configure" do
       let(:base_url) { "http://www.hoppinger.com" }
+      let(:base_path) { "test" }
       let(:username) { "username" }
       let(:password) { "password" }
 
       before :each do
         Vapor.configure do |config|
           config.base_url = base_url
+          config.base_path = base_path
           config.username = username
           config.password = password
         end
@@ -35,6 +37,10 @@ RSpec.describe Vapor do
 
       it "sets base_url" do
         expect(Vapor.configuration.base_url).to eq(base_url)
+      end
+
+      it "sets base_path" do
+        expect(Vapor.configuration.base_path).to eq(base_path)
       end
 
       it "sets username" do

@@ -103,6 +103,23 @@ module Vapor
       # :nocov:
     end
 
+    def list_files(path)
+      Vapor.log "list_files: #{path}"
+      return false unless exists?(path)
+      begin
+        items = []
+        dav.find(encoded(path), recursive: true) do |item|
+          items << item
+        end
+        return items
+      # :nocov:
+      rescue Net::HTTPServerException => e
+        Vapor.log ".. http error: #{e.class}: #{e.message}"
+        false
+      end
+      # :nocov:
+    end
+
         ######################################################################
 
     def self.move(path, destination)
@@ -116,25 +133,6 @@ module Vapor
 
       begin
         dav.move(URI.encode(path), URI.encode(destination))
-      rescue Net::HTTPServerException => e
-        Vapor.log ".. http error: #{e.class}: #{e.message}"
-        false
-      end
-    end
-
-    def self.list_files(path)
-      path = "#{Rails.application.config.owncloud[:base_path]}/#{path}"
-      unless dav.exists?(URI.encode(path))
-        Vapor.log "Can't list remote path #{path.inspect}: path does not exist"
-        return false
-      end
-
-      begin
-        items = []
-        dav.find(URI.encode(path), recursive: true) do |item|
-          items << item
-        end
-        return items
       rescue Net::HTTPServerException => e
         Vapor.log ".. http error: #{e.class}: #{e.message}"
         false
