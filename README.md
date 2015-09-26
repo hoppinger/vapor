@@ -22,7 +22,13 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+In order to create a directory
+
+    Vapor.mkdir('orphan')
+    Vapor.mkdir('dir ec tory')  # Spaces are allowed
+    Vapor.mkdir('dir&ectory')   # Special chars are allowed
+    Vapor.mkdir('parent/child')
+    Vapor.mkdir('parent/child/grand_child')
 
 ## Development
 
@@ -33,4 +39,3 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/vapor.
-
