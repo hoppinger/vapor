@@ -19,8 +19,16 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.before(:each) do
-    stub_request(:propfind, "http://www.hoppinger.com/test/non-existing").to_return(status: 300, body: "", headers: {})
+    stub_request(:propfind, "http://www.hoppinger.com/test/non-existing").to_return(status: 500, body: "", headers: {})
     stub_request(:propfind, "http://www.hoppinger.com/test/existing/non-existing").to_return(status: 500, body: "", headers: {})
+    stub_request(:propfind, "http://www.hoppinger.com/test/non-existing.file").to_return(status: 500, body: "", headers: {})
+
+    stub_request(:mkcol, "http://www.hoppinger.com/test/non-existing").to_return(status: 200, body: "", headers: {})
+    stub_request(:propfind, "http://www.hoppinger.com/test/non-existing/non-existing").to_return(status: 200, body: "", headers: {})
+    stub_request(:mkcol, "http://www.hoppinger.com/test/existing/non-existing").to_return(status: 200, body: "", headers: {})
+
+    stub_request(:propfind, "http://www.hoppinger.com/test/existing.file").to_return(status: 200, body: "", headers: {})
     stub_request(:propfind, "http://www.hoppinger.com/test/existing").to_return(status: 200, body: "", headers: {})
+    stub_request(:delete, "http://www.hoppinger.com/test/existing.file").to_return(status: 200, body: "", headers: {})
   end
 end

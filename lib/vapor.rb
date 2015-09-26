@@ -16,7 +16,8 @@ module Vapor
   def self.options
     @options ||= {
       log: true,
-      logger: nil
+      logger: nil,
+      overwrite: false
     }
   end
 

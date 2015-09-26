@@ -4,7 +4,7 @@ RSpec.describe Vapor do
   describe "." do
     describe "options" do
       it "returns a hash" do
-        expect(Vapor.options).to eq(log: true, logger: nil)
+        expect(Vapor.options).to eq(log: true, logger: nil, overwrite: false)
       end
     end
 
