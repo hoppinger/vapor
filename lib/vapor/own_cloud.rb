@@ -1,5 +1,5 @@
 module Vapor
-  class OwnCloud
+  module OwnCloud
     def self.put_file(path, remote_path, options = {})
       options = { overwrite: false }.merge(options)
 
@@ -73,24 +73,14 @@ module Vapor
       end
     end
 
-    def self.mkdir(path)
-      begin
-        Vapor.log "Creating remote path #{path.inspect}"
-
-        split_path = path.split("/")
-
-        (1..split_path.length).to_a.each do |count|
-          new_path = File.join(split_path[0, count])
-
-          next if dav.exists?(URI.encode(new_path))
-
-          dav.mkdir(URI.encode(File.join(split_path[0,count])))
-        end
-        true
-      rescue Net::HTTPServerException => e
-        Vapor.log ".. http error: #{e.class}: #{e.message}"
-        false
+    def mkdir(path)
+      Vapor.log "mkdir: #{path}"
+      split_path = path.split("/")
+      result = []
+      for i in (split_path.length - 1).downto(0)
+        result << mkdir_unless_exists(split_path.take(split_path.length - i).join("/"))
       end
+      result
     end
 
     def self.move(path, destination)
@@ -129,7 +119,24 @@ module Vapor
       end
     end
 
-    def self.dav
+    # Util
+    def mkdir_unless_exists(path)
+      encoded_path = URI.encode([Vapor.configuration.base_path, path].join("/"))
+      begin
+        Vapor.log ".. check_existance_and_create_directory: #{encoded_path}"
+        if dav.exists?(encoded_path)
+          return false
+        else
+          dav.mkdir(encoded_path)
+          return true
+        end
+      rescue Net::HTTPServerException => e
+        Vapor.log ".. http error: #{e.class}: #{e.message}"
+        false
+      end
+    end
+
+    def dav
       @dav ||= begin
         # TODO: (dunyakirkali) refactor to class
         dav = Net::DAV.new(Vapor.configuration.base_url)

@@ -2,9 +2,10 @@ require "bundler/setup"
 Bundler.setup
 
 require "webmock/rspec"
+WebMock.disable_net_connect!(allow_localhost: true)
 
 require "simplecov"
-require 'simplecov-rcov'
+require "simplecov-rcov"
 SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
 SimpleCov.start do
   add_filter "spec"
@@ -17,7 +18,9 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.order = "random"
 
-  # WebMock.stub_request(:propfind, "http://www.hoppinger.com/test").
-  #        with(body: "<?xml version=\"1.0\" encoding=\"utf-8\"?><DAV:propfind xmlns:DAV=\"DAV:\"><DAV:allprop/></DAV:propfind>").
-  #        to_return(status: 200, body: "", headers: {})
+  config.before(:each) do
+    stub_request(:propfind, "http://www.hoppinger.com/test/non-existing").to_return(status: 300, body: "", headers: {})
+    stub_request(:propfind, "http://www.hoppinger.com/test/existing/non-existing").to_return(status: 500, body: "", headers: {})
+    stub_request(:propfind, "http://www.hoppinger.com/test/existing").to_return(status: 200, body: "", headers: {})
+  end
 end

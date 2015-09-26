@@ -7,6 +7,7 @@ require "vapor/own_cloud"
 
 module Vapor
   extend Logger
+  extend OwnCloud
 
   class << self
     attr_writer :configuration, :logger

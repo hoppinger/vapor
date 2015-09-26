@@ -7,6 +7,7 @@ RSpec.describe Vapor::Configuration do
   before do
     Vapor.configure do |config|
       config.base_url = "http://www.hoppinger.com"
+      config.base_path = "test"
       config.username = "username"
       config.password = "password"
     end
@@ -18,6 +19,10 @@ RSpec.describe Vapor::Configuration do
 
   it "should have a default base_url" do
     expect(configuration.base_url).to eq("http://www.hoppinger.com")
+  end
+
+  it "should have a default base_path" do
+    expect(configuration.base_path).to eq("test")
   end
 
   it "should have a default username" do
