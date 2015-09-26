@@ -28,8 +28,4 @@ module Vapor
   def self.configure
     yield(configuration)
   end
-
-  # def self.logger
-  #   @logger ||= Logger.new
-  # end
 end
