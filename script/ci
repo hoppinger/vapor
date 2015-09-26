@@ -1,0 +1,24 @@
+#!/bin/bash
+export PATH="/usr/local/rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+run() {
+  time bundle exec $*
+}
+
+fail() {
+  if [[ $? -ne 0 ]]; then
+    echo "--- Fail!"
+    exit 1
+  fi
+}
+
+echo "--- Starting continuous integration build"
+bundle
+
+echo "--- Check style"
+run rubocop
+
+echo "--- Check unit tests"
+run rspec --color spec --format progress --format html --out rspec.html
+fail

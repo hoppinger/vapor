@@ -3,7 +3,7 @@ require "logger"
 require "vapor/version"
 require "vapor/configuration"
 require "vapor/logger"
-require "vapor/owncloud"
+require "vapor/own_cloud"
 
 module Vapor
   extend Logger
