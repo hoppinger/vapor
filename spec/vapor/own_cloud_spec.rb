@@ -45,18 +45,20 @@ RSpec.describe Vapor::OwnCloud do
     end
 
     describe "put_file" do
-      xit "should put file if it exists and options[:overwrite] = true" do
+      let(:file_path) { File.join(Dir.pwd, "spec", "fixtures", "non-existing.file") }
+      it "should put file if it exists and options[:overwrite] = true" do
+        puts Dir.pwd
         Vapor.options[:overwrite] = true
-        expect(Vapor.put_file("existing.file", "existing.file")).to eq(true)
+        expect(Vapor.put_file(file_path, "existing.file")).to eq(true)
         Vapor.options[:overwrite] = false
       end
 
-      xit "should put file if it does not exist" do
-        expect(Vapor.put_file("non-existing.file", "non-existing.file")).to eq(true)
+      it "should put file if it does not exist" do
+        expect(Vapor.put_file(file_path, "non-existing.file")).to eq(true)
       end
 
       it "should not put file if it exists and options[:overwrite] = false" do
-        expect(Vapor.put_file("existing.file", "existing.file")).to eq(false)
+        expect(Vapor.put_file(file_path, "existing.file")).to eq(false)
       end
     end
 

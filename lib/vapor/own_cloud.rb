@@ -31,8 +31,9 @@ module Vapor
 
     # public
     def put_file(file_path, remote_path)
+      return false if exists?(remote_path) && !Vapor.options[:overwrite]
       delete(remote_path) if Vapor.options[:overwrite]
-      return false if exists?(remote_path)
+      
       split_remote_path = remote_path.split("/")
       base_path = File.join(split_remote_path[0, split_remote_path.length - 1])
       mkdir(base_path)
