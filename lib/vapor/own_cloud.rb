@@ -5,7 +5,7 @@ module Vapor
       Vapor.log "mkdir: #{path}"
       split_path = path.split("/")
       result = []
-      for i in (split_path.length - 1).downto(0)
+      (split_path.length - 1).downto(0).each do |i|
         result << mkdir_unless_exists(split_path.take(split_path.length - i).join("/"))
       end
       result
