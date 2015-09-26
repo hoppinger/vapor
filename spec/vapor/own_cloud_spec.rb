@@ -26,19 +26,26 @@ RSpec.describe Vapor::OwnCloud do
       end
     end
 
-    describe "delete_file" do
+    describe "delete" do
       it "should delete file if it exists" do
-        expect(Vapor.delete_file("existing.file")).to eq(true)
+        expect(Vapor.delete("existing.file")).to eq(true)
+      end
+
+      it "should delete folder if it exists" do
+        expect(Vapor.delete("existing-folder")).to eq(true)
       end
 
       it "should not delete file if it does not exist" do
-        expect(Vapor.delete_file("non-existing.file")).to eq(false)
+        expect(Vapor.delete("non-existing.file")).to eq(false)
+      end
+
+      it "should not delete folder if it does not exist" do
+        expect(Vapor.delete("non-existing-folder")).to eq(false)
       end
     end
 
     describe "put_file" do
       xit "should put file if it exists and options[:overwrite] = true" do
-        Vapor.options[:overwrite] = true
         expect(Vapor.put_file("existing.file", "existing.file")).to eq(true)
       end
 
@@ -49,6 +56,7 @@ RSpec.describe Vapor::OwnCloud do
       it "should not put file if it exists and options[:overwrite] = false" do
         Vapor.options[:overwrite] = false
         expect(Vapor.put_file("existing.file", "existing.file")).to eq(false)
+        Vapor.options[:overwrite] = true
       end
     end
 
@@ -71,7 +79,7 @@ RSpec.describe Vapor::OwnCloud do
         expect(Vapor.mkdir("non-existing")).to match_array([true])
       end
 
-      xit "should recursively create a directories if they do not exist" do
+      it "should recursively create a directories if they do not exist" do
         expect(Vapor.mkdir("non-existing/non-existing")).to match_array([true, true])
       end
 
