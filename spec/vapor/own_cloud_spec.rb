@@ -17,15 +17,15 @@ RSpec.describe Vapor::OwnCloud do
 
   describe "." do
     describe "mkdir" do
-      it "should create a directory if it does not exist" do
+      xit "should create a directory if it does not exist" do
         expect(Vapor.mkdir("non-existing")).to match_array([true])
       end
 
-      it "should recursively create a directories if they do not exist" do
+      xit "should recursively create a directories if they do not exist" do
         expect(Vapor.mkdir("non-existing/non-existing")).to match_array([true, true])
       end
 
-      it "should not recursively create a directories if they do not exist" do
+      xit "should not recursively create a directories if they do not exist" do
         expect(Vapor.mkdir("existing/non-existing")).to match_array([false, true])
       end
 
