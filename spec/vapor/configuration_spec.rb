@@ -6,9 +6,9 @@ RSpec.describe Vapor::Configuration do
 
   before do
     Vapor.configure do |config|
-      config.base_url = 'http://www.hoppinger.com'
-      config.username = 'username'
-      config.password = 'password'
+      config.base_url = "http://www.hoppinger.com"
+      config.username = "username"
+      config.password = "password"
     end
   end
 
