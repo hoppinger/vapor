@@ -104,6 +104,7 @@ module Vapor
       # :nocov:
     end
 
+    # public
     def list_files(path)
       Vapor.log "list_files: #{path}"
       return false unless exists?(path)
@@ -121,6 +122,7 @@ module Vapor
       # :nocov:
     end
 
+    # public
     def move(path, destination)
       Vapor.log "move: #{path}, #{destination}"
       return false unless exists?(path)
@@ -136,9 +138,9 @@ module Vapor
       # :nocov:
     end
 
+    # TODO: (dunyakirkali) refactor to class
     def dav
       @dav ||= begin
-        # TODO: (dunyakirkali) refactor to class
         dav = Net::DAV.new(Vapor.configuration.base_url)
         dav.credentials(Vapor.configuration.username, Vapor.configuration.password)
         dav.verify_server = false

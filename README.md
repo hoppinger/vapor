@@ -42,6 +42,10 @@ In order to get a file
 
     Vapor.get_file('destination.file')
 
+In order to list files in path
+
+    Vapor.list_files('remote-folder')
+
 In order to create a directory
 
     Vapor.mkdir('orphan')
