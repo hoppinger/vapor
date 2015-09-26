@@ -1,5 +1,6 @@
 module Vapor
   module OwnCloud
+    # public
     def mkdir(path)
       Vapor.log "mkdir: #{path}"
       split_path = path.split("/")
@@ -10,6 +11,7 @@ module Vapor
       result
     end
 
+    # protected
     def mkdir_unless_exists(path)
       Vapor.log "mkdir_unless_exists: #{path}"
       begin
@@ -19,14 +21,17 @@ module Vapor
           dav.mkdir(encoded(path))
           return true
         end
+      # :nocov:
       rescue Net::HTTPServerException => e
         Vapor.log ".. http error: #{e.class}: #{e.message}"
         false
       end
+      # :nocov:
     end
 
+    # public
     def put_file(file_path, remote_path)
-      delete_file(remote_path) if Vapor.options[:overwrite]
+      delete(remote_path) if Vapor.options[:overwrite]
       return false if exists?(remote_path)
       split_remote_path = remote_path.split("/")
       base_path = File.join(split_remote_path[0, split_remote_path.length - 1])
@@ -37,38 +42,48 @@ module Vapor
           dav.put(encoded(remote_path), stream, File.size(file_path))
         end
         true
+      # :nocov:
       rescue Net::HTTPServerException => e
         Vapor.log ".. http error: #{e.class}: #{e.message}"
         false
       end
+      # :nocov:
     end
 
-    def delete_file(path)
-      Vapor.log "delete_file: #{path}"
+    # public
+    def delete(path)
+      Vapor.log "delete: #{path}"
       return false unless exists?(path)
       begin
         dav.delete(encoded(path))
         true
+      # :nocov:
       rescue Net::HTTPServerException => e
         Vapor.log ".. http error: #{e.class}: #{e.message}"
         false
       end
+      # :nocov:
     end
 
+    # public
     def exists?(path)
       Vapor.log "exists?: #{path}"
       begin
         dav.exists?(encoded(path))
+      # :nocov:
       rescue Net::HTTPServerException => e
         Vapor.log ".. http error: #{e.class}: #{e.message}"
         false
       end
+      # :nocov:
     end
 
+    # protected
     def encoded(path)
       URI.encode([Vapor.configuration.base_path, path].join("/"))
     end
 
+    # public
     def get_file(path, target_path = nil)
       Vapor.log "get_file: #{path}, #{target_path}"
       return false unless exists?(path)
@@ -80,10 +95,12 @@ module Vapor
         else
           content
         end
+      # :nocov:
       rescue Net::HTTPServerException => e
         Vapor.log ".. http error: #{e.class}: #{e.message}"
         false
       end
+      # :nocov:
     end
 
         ######################################################################
