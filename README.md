@@ -1,5 +1,8 @@
 # Vapor
 
+[![Build Status](http://drone.hoppinger.com/api/badges/hoppinger/vapor/status.svg)](http://drone.hoppinger.com/hoppinger/vapor)
+
+
 Welcome to vapor! With vapor you can interact with the web-dav interface of [OwnCloud](https://owncloud.org/).
 
 ## Installation
