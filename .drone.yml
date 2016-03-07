@@ -12,5 +12,5 @@ build:
     - ./script/ci
 matrix:
   RUBY_VERSION:
-    - 1.9.3-p551
+    - 1.9.3
     - 2.2.3
